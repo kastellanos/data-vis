@@ -1,0 +1,23 @@
+{
+  "name": "datavis",
+  "authors": [
+    "Castellanos <castellanos1458@gmail.com>"
+  ],
+  "description": "Data visualization examples",
+  "main": "index.html",
+  "keywords": [
+    "data",
+    "visualization",
+    "d3",
+    "charts"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

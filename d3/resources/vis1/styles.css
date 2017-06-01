@@ -1,0 +1,6 @@
+.bar {
+    fill: green;
+}
+.bar:hover {
+    fill: blue;
+}
