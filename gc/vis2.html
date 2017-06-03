@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../app/libs/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../app/libs/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="../app/libs/jquery-csv/src/jquery.csv.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <link rel="stylesheet" href="../app/libs/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../app/libs/highlightjs/styles/atom-one-light.css">
+    <link rel="stylesheet" href="../app/libs/general.css">
+    <link rel="stylesheet" href="resources/vis2/styles.css">
+    
+
+</head>
+<body>
+<header class="header"><h1>Data Visualization</h1></header>
+<div class="container-fluid chart-vis jumbotron">
+<h1 class="text-center">Google Bar Chart</h1>
+<div class="col-md-4"></div>
+<div class="col-md-4">
+<div class="chart text-center" id="chart"></div>
+</div>
+<div class="col-md-4"></div>
+</div>
+
+<pre><code class="javascript">
+function drawChart(){
+    var options = {'title':'Armas utilizadas para robos 2017 Enero-Marzo',
+       'width':550,
+       'height':400};
+      $.get("resources/vis2/data.csv",function(csvString){
+        var d = $.csv.toArrays(csvString,{onParseValue: $.csv.hooks.castToScalar});
+        console.log(d);
+        var data = new google.visualization.arrayToDataTable(d);
+        data.setColumnLabel(1,"Total armas usadas")
+        var chart = new google.visualization.BarChart(document.getElementById('chart'));
+        chart.draw(data, options);
+      })
+}
+google.charts.load('current', {packages: ['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+</code></pre>
+<script src="resources/vis2/vis.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>-->
+<script src="../app/libs/highlightjs/highlight.pack.min.js "></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

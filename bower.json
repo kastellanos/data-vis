@@ -19,5 +19,11 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "highlightjs": "^9.11.0",
+    "d3": "^4.9.1",
+    "jquery-csv": "^0.8.3"
+  }
 }
