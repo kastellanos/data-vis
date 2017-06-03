@@ -3,90 +3,64 @@
  */
 var width = 960;
 var height = 500;
-var padding = 30;
-var x = d3.scaleLinear();
-var y = d3.scaleLinear();
-
-var axisMargin = 20,
-    margin = 40,
-    valueMargin = 4,
-    barHeight = 0,
-    barPadding = 0,
-    data, bar, svg, scale, xAxis, labelWidth = 0;
-
-function build_svg( c ){
-    return c.append("svg").attr("width",width+30).attr("height",height+30);
-}
-
-
-function build_rectangles( s, data ){
-    rect = s.selectAll(".bar")
-        .data(data)
-        .enter().append("g")
-    rect.attr("class", "bar")
-        .attr("cx",0)
-        .attr("transform", function(d, i) {
-            return "translate(" + margin + "," + (i * (barHeight + barPadding) + barPadding) + ")";
-        });
-    rect.append("text")
-        .attr("class", "label")
-        .attr("y", barHeight / 2)
-        .attr("dy", ".35em") //vertical align middle
-        .text(function(d){
-            return d.arma;
-        }).each(function() {
-        labelWidth = Math.ceil(Math.max(labelWidth, this.getBBox().width));
+radius = Math.min(width, height) / 2;  
+function build_pie(canvas, data){
+    var pie = d3.pie()
+    .sort(null)
+    .value(function(d) {
+        return d.value;
     });
-    //BUILD SCALE
-    max = d3.max(data, function(d) { return d.count; });
-    x.range([0,width-margin*2-labelWidth]).domain([0,max]);
-    rect.append("rect")
-        .attr("transform", "translate("+labelWidth+", 0)")
-        .attr("height", barHeight)
-        .attr("width", function(d){
-            //alert(x(d.count));
-            return x(d.count);
-        });
-    var div = d3.select("body").append("div").attr("class", "toolTip");
-    rect
-        .on("mousemove", function(d){
-            div.style("left", d3.event.pageX+10+"px");
-            div.style("top", d3.event.pageY-25+"px");
-            div.style("display", "inline-block");
-            div.html("<div class='title'>"+(d.arma)+"</div><div class='message'>"+(d.count)+"</div>");
-        });
-    rect
-        .on("mouseout", function(d){
-            div.style("display", "none");
-        });
-    //BUILD AXIS
-    var xAxis = d3.axisBottom(x).tickSize(-height + 2*margin+axisMargin);
-    s.insert("g",":first-child")
-        .attr("class", "axisHorizontal")
-        .attr("transform", "translate(" + (margin + labelWidth) + ","+ (height - axisMargin - margin)+")")
-        .call(xAxis);
+    var arc = d3.arc()
+    .outerRadius(radius * 0.8)
+    .innerRadius(radius * 0.4);
+
+    var outerArc = d3.arc()
+    .innerRadius(radius * 0.9)
+    .outerRadius(radius * 0.9);
+    canvas.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var key = function(d){ return d.data.label;}
+    var color = d3.scale.category20();
+
+     
+
+     var slice = canvas.select(".slices").selectAll("path.slice")
+        .data( pie(data), key);
+    slice.enter()
+        .insert("path")
+        .style("fill", function(d) { return color(d.data.arma); })
+        .attr("class", "slice");
+    slice.exit()
 }
 
-function build_bars( s ){
-    d3.json("http://www.mocky.io/v2/59309ebd1000000c09995f2a",function(d){
+function build_chart( s ){
+    d3.csv("resources/vis3/data.csv",function(d){
             d.count = +d.count;
-            //alert(d.count);
             return d;
         }, function(error,data){
-            if (error) throw error;
-            barHeight = (height-axisMargin-margin*2)* 0.4/data.length,
-            barPadding = (height-axisMargin-margin*2)*0.6/data.length,
-
-            build_rectangles(s, data);
+            
+            build_pie(s, data);
         }
 
     )
+}
+
+function build_svg( c ){
+    c.append("svg")
+    .append("g")
+    c.append("g")
+    .attr("class", "slices");
+    c.append("g")
+        .attr("class", "labels");
+    c.append("g")
+        .attr("class", "lines");
+    return c;
 }
 function main(){
     var container = d3.select(".chart");
     var svg = build_svg(container);
 
-    build_bars( svg );
+    build_chart( svg );
 }
 
 main();
