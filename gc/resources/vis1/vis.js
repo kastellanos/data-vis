@@ -6,7 +6,7 @@ function drawChart(){
 	  	var d = $.csv.toArrays(csvString,{onParseValue: $.csv.hooks.castToScalar});
 	  	console.log(d);
 	  	var data = new google.visualization.arrayToDataTable(d);
-	  	var chart = new google.visualization.BarChart(document.getElementById('chart'));
+	  	var chart = new google.visualization.ColumnChart(document.getElementById('chart'));
 		chart.draw(data, options);
 	  })
 }

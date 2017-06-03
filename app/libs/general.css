@@ -34,3 +34,8 @@ header > h1 {
 	background-color: rgb(224,199,31);
 }
 
+a {
+    text-decoration: none;
+    color:  white !important;
+
+}

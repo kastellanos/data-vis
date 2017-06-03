@@ -11,8 +11,7 @@ function build_chart( s ){
 		download: true,
 		complete: function(results) {
 			
-			var ctx = document.getElementById("chart").getContext("2d");
-			
+		var ctx = document.getElementById("chart").getContext("2d");
 			dt = []
 			lb = []
 			cl = []
@@ -20,15 +19,15 @@ function build_chart( s ){
 				console.log(results.data[i][0]);
 				lb.push( results.data[i][0]);
 				dt.push( results.data[i][1]);
-				//cl.push( getRandomColor());
+				cl.push( getRandomColor())
 			}
 
 	var config = {
-        type: 'pie',
+        type: 'Bar',
         data: {
             datasets: [{
                 data: dt,
-                
+                backgroundColor: cl,
                 label: 'Dataset 1'
             }],
             labels: lb

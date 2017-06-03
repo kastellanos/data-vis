@@ -1,77 +1,41 @@
-/**
- * Created by Vivelab on 31/05/2017.
- */
-var width = 960;
-var height = 500;
-radius = Math.min(width, height) / 2;  
-function build_pie(canvas, data){
-    var pie = d3.pie()
+
+var data = [10, 20, 100];
+
+var width = 960,
+    height = 500,
+    radius = Math.min(width, height) / 2;
+
+var color = d3.scaleOrdinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888"]);
+
+var arc = d3.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(0);
+
+var labelArc = d3.arc()
+    .outerRadius(radius - 40)
+    .innerRadius(radius - 40);
+
+var pie = d3.pie()
     .sort(null)
-    .value(function(d) {
-        return d.value;
-    });
-    var arc = d3.arc()
-    .outerRadius(radius * 0.8)
-    .innerRadius(radius * 0.4);
+    .value(function(d) { return d; });
 
-    var outerArc = d3.arc()
-    .innerRadius(radius * 0.9)
-    .outerRadius(radius * 0.9);
-    canvas.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+var svg = d3.select(".chart").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    var key = function(d){ return d.data.label;}
-    var color = d3.scale.category20();
+  var g = svg.selectAll(".arc")
+      .data(pie(data))
+    .enter().append("g")
+      .attr("class", "arc");
 
-     
+  g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { return color(d.data); });
 
-     var slice = canvas.select(".slices").selectAll("path.slice")
-        .data( pie(data), key);
-    slice.enter()
-        .insert("path")
-        .style("fill", function(d) { return color(d.data.arma); })
-        .attr("class", "slice");
-    slice.exit()
-}
-
-function build_chart( s ){
-    d3.csv("resources/vis3/data.csv",function(d){
-            d.count = +d.count;
-            return d;
-        }, function(error,data){
-            
-            build_pie(s, data);
-        }
-
-    )
-}
-
-function build_svg( c ){
-    c.append("svg")
-    .append("g")
-    c.append("g")
-    .attr("class", "slices");
-    c.append("g")
-        .attr("class", "labels");
-    c.append("g")
-        .attr("class", "lines");
-    return c;
-}
-function main(){
-    var container = d3.select(".chart");
-    var svg = build_svg(container);
-
-    build_chart( svg );
-}
-
-main();
-
-
-
-
-
-
-
-
-
-
-
+  g.append("text")
+      .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .text(function(d) { return d.data; });
