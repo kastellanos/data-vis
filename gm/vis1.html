@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../app/libs/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../app/libs/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="../app/libs/jquery-csv/src/jquery.csv.min.js"></script>
+
+    <link rel="stylesheet" href="../app/libs/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../app/libs/highlightjs/styles/atom-one-light.css">
+    <link rel="stylesheet" href="../app/libs/general.css">
+    <link rel="stylesheet" href="resources/vis1/styles.css">
+
+
+</head>
+<body>
+<header class="header"><h1>Data Visualization</h1></header>
+<div class="container-fluid chart-vis jumbotron">
+<h1 class="text-center">Google Maps center map</h1>
+<div class="col-md-4"></div>
+<div class="col-md-4">
+    <div id="map"></div>
+</div>
+<div class="col-md-4"></div>
+</div>
+
+<pre><code class="javascript">
+var map;
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 4.570548, lng: -74.133559},
+        zoom: 15
+    });
+}
+</code></pre>
+<script src="resources/vis1/vis.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>-->
+<script src="../app/libs/highlightjs/highlight.pack.min.js "></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC955FlG-NE8ZQQ9zgW1WIbgPRPXDJAgpY&callback=initMap"
+        async defer></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

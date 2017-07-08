@@ -12,22 +12,68 @@
     <link rel="stylesheet" href="../app/libs/highlightjs/styles/atom-one-light.css">
     <link rel="stylesheet" href="../app/libs/general.css">
     <link rel="stylesheet" href="resources/vis1/styles.css">
-    
+
 
 </head>
 <body>
 <header class="header"><h1>Data Visualization</h1></header>
 <div class="container-fluid chart-vis jumbotron">
-<h1 class="text-center">Chart.js Vertical Bar Chart</h1>
-<div class="col-md-4"></div>
-<div class="col-md-4">
-<canvas class="chart text-center" id="chart"></canvas>
-</div>
-<div class="col-md-4"></div>
+    <h1 class="text-center">Chart.js Horizontal Bar Chart</h1>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <canvas class="chart text-center" id="chart" height="300"></canvas>
+    </div>
+    <div class="col-md-4"></div>
 </div>
 
 <pre><code class="javascript">
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+function build_chart( s ){
+    Papa.parse(s, {
+        download: true,
+        complete: function(results) {
 
+            var ctx = document.getElementById("chart").getContext("2d");
+
+            dt = []
+            lb = []
+            cl = []
+            for(var i = 1;i &lt results.data.length; i++){
+                console.log(results.data[i][0]);
+                lb.push( results.data[i][0]);
+                dt.push( results.data[i][1]);
+                cl.push( getRandomColor());
+            }
+
+            var config = {
+                type: 'horizontalBar',
+                data: {
+                    datasets: [{
+                        data: dt,
+                        backgroundColor: cl,
+                        label: 'Dataset 1'
+                    }],
+                    labels: lb
+                },
+                options: {
+                    responsive: true
+                }
+            };
+            window.myBar = new Chart(ctx, config);
+        }
+    });
+}
+
+window.onload = function() {
+    build_chart( "resources/vis1/data.csv" )
+};
 </code></pre>
 <script src="resources/vis1/vis.js"></script>
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>-->

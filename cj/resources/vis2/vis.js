@@ -1,15 +1,47 @@
-function drawChart(){
-	var options = {'title':'Armas utilizadas para robos 2017 Enero-Marzo',
-	   'width':550,
-	   'height':400};
-	  $.get("resources/vis2/data.csv",function(csvString){
-	  	var d = $.csv.toArrays(csvString,{onParseValue: $.csv.hooks.castToScalar});
-	  	console.log(d);
-	  	var data = new google.visualization.arrayToDataTable(d);
-	  	data.setColumnLabel(1,"Total armas usadas")
-	  	var chart = new google.visualization.BarChart(document.getElementById('chart'));
-		chart.draw(data, options);
-	  })
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
-google.charts.load('current', {packages: ['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+function build_chart( s ){
+    Papa.parse(s, {
+        download: true,
+        complete: function(results) {
+
+            var ctx = document.getElementById("chart").getContext("2d");
+
+            dt = []
+            lb = []
+            cl = []
+            for(var i = 1;i<results.data.length; i++){
+                console.log(results.data[i][0]);
+                lb.push( results.data[i][0]);
+                dt.push( results.data[i][1]);
+                cl.push( getRandomColor());
+            }
+
+            var config = {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        data: dt,
+                        backgroundColor: cl,
+                        label: 'Dataset 1'
+                    }],
+                    labels: lb
+                },
+                options: {
+                    responsive: true
+                }
+            };
+            window.myBar = new Chart(ctx, config);
+        }
+    });
+}
+
+window.onload = function() {
+    build_chart( "resources/vis2/data.csv" )
+};

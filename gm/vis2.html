@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../app/libs/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../app/libs/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="../app/libs/jquery-csv/src/jquery.csv.min.js"></script>
+
+    <link rel="stylesheet" href="../app/libs/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../app/libs/highlightjs/styles/atom-one-light.css">
+    <link rel="stylesheet" href="../app/libs/general.css">
+    <link rel="stylesheet" href="resources/vis2/styles.css">
+
+
+</head>
+<body>
+<header class="header"><h1>Data Visualization</h1></header>
+<div class="container-fluid chart-vis jumbotron">
+    <h1 class="text-center">Google Maps interaction</h1>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div id="map"></div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+<div class="modal fade" id="loc" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Atención</h4>
+            </div>
+            <div class="modal-body">
+                <p>Estamos cerca de la casa de la cultura de Tunjuelito.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<pre><code class="javascript">
+function initMap() {
+    var myLatlng = {lat: 4.570548, lng: -74.133559};
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: myLatlng,
+        zoom: 15
+    });
+
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        title: 'Click to zoom'
+    });
+
+    map.addListener('center_changed', function() {
+        // 3 seconds after the center of the map has changed, pan back to the
+        // marker.
+        window.setTimeout(function() {
+            map.panTo(marker.getPosition());
+        }, 3000);
+    });
+
+    marker.addListener('click', function() {
+        //alert("Estamos cerca de la casa de la cultura de Tunjuelito");
+        $('#loc').modal({
+            show: 'true'
+        });
+    });
+}
+</code></pre>
+<script src="resources/vis2/vis.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>-->
+<script src="../app/libs/highlightjs/highlight.pack.min.js "></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC955FlG-NE8ZQQ9zgW1WIbgPRPXDJAgpY&callback=initMap"
+        async defer></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
